@@ -124,18 +124,24 @@ app.put("/account", verifyIfExistsAccountCPF, (req, res) => {
 app.get("/account", verifyIfExistsAccountCPF, (req, res) => {
   const { customer } = req;
 
-  return res.status(200).json(customer)
+  return res.status(200).json(customer);
 });
 
 app.delete("/account", verifyIfExistsAccountCPF, (req, res) => {
   const { customer } = req;
 
-  customers.splice(customer,1)
+  customers.splice(customer, 1);
 
-  return res.status(204).send()
-})
+  return res.status(204).send();
+});
 
+app.get("/balance", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
 
+  const balance = getBalance(customer.statement);
+
+  return res.status(200).json(balance);
+});
 
 app.listen(port, () => {
   console.info(`Server is running in http://localhost:${port}`);
