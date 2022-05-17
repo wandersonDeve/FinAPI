@@ -8,6 +8,21 @@ const port = process.env.PORT || 3333;
 
 const customers = [];
 
+//middleware
+function verifyIfExistsAccountCPF(req, res, next) {
+  const { cpf } = req.body;
+
+  const customer = customers.find((customer) => customer.cpf === cpf);
+
+  if (!customer) {
+    return res.status(400).json({ error: "Custumer not found" });
+  }
+
+  req.customer = customer;
+
+  return next();
+}
+
 app.post("/account", (req, res) => {
   const { cpf, name } = req.body;
 
@@ -29,16 +44,9 @@ app.post("/account", (req, res) => {
   return res.status(201).send();
 });
 
-app.get("/statement/:cpf", (req, res) => {
-  const { cpf } = req.params;
-  
-  const customer = customers.find(customer => customer.cpf === cpf);
-
-  if(!customer) {
-    return res.status(400).json({ error: "Custumer not found" });
-  }
-
-  return res.status(200).json(customer.statement) 
+app.get("/statement", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+  return res.status(200).json(customer.statement);
 });
 
 app.listen(port, () => {
