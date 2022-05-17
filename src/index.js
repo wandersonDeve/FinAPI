@@ -127,6 +127,16 @@ app.get("/account", verifyIfExistsAccountCPF, (req, res) => {
   return res.status(200).json(customer)
 });
 
+app.delete("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { customer } = req;
+
+  customers.splice(customer,1)
+
+  return res.status(204).send()
+})
+
+
+
 app.listen(port, () => {
   console.info(`Server is running in http://localhost:${port}`);
 });
