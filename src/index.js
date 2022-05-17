@@ -112,6 +112,15 @@ app.get("/statement/date", verifyIfExistsAccountCPF, (req, res) => {
   return res.status(200).json(statement);
 });
 
+app.put("/account", verifyIfExistsAccountCPF, (req, res) => {
+  const { name } = req.params;
+  const { customer } = req;
+
+  customer.name = name;
+
+  return res.status(201).send();
+});
+
 app.listen(port, () => {
   console.info(`Server is running in http://localhost:${port}`);
 });
