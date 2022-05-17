@@ -16,7 +16,7 @@ app.post("/account", (req, res) => {
   );
 
   if (customerAlreadyExists) {
-    return res.status(400).json({ error: "Custumers already exist" });
+    return res.status(400).json({ error: "Custumer already exist" });
   }
 
   customers.push({
@@ -27,6 +27,18 @@ app.post("/account", (req, res) => {
   });
 
   return res.status(201).send();
+});
+
+app.get("/statement/:cpf", (req, res) => {
+  const { cpf } = req.params;
+  
+  const customer = customers.find(customer => customer.cpf === cpf);
+
+  if(!customer) {
+    return res.status(400).json({ error: "Custumer not found" });
+  }
+
+  return res.status(200).json(customer.statement) 
 });
 
 app.listen(port, () => {
